@@ -7,6 +7,7 @@
 // @include     https://nhentai.net/g/*/*/
 // @include     https://www.manhuaren.com/*/
 // @icon        https://www.google.com/s2/favicons?domain=nhentai.net
+// @icon        https://www.google.com/s2/favicons?domain=www.manhuaren.com
 // @grant       none
 // ==/UserScript==
 
@@ -30,7 +31,7 @@
 
         const nextChapter = document.getElementsByClassName("winnextchapter")[0]
 
-        // handle left right and esc key
+        // handle left and right key
         window.onkeydown = (event) => {
             const { key, repeat } = event
             if(!repeat){
