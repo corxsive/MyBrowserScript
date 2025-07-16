@@ -1,14 +1,14 @@
 // ==UserScript==
-// @name        New Userscript
-// @namespace   https://noel.moe
-// @version     1.0.0
+// @name         MyLittleShion
+// @version      2025-07-16
 // @description custom style only
-// @author      ShionMaker
-// @include     https://nhentai.net/g/*/*/
-// @include     https://www.manhuaren.com/*/
-// @icon        https://www.google.com/s2/favicons?domain=nhentai.net
-// @icon        https://www.google.com/s2/favicons?domain=www.manhuaren.com
-// @grant       none
+// @author       ShionMaker
+// @include      https://nhentai.net/g/*/*/
+// @include      https://www.manhuaren.com/*/
+// @include      https://animemusicquiz.com/
+// @include      https://www.youtube.com/watch*
+// @icon         https://www.google.com/s2/favicons?sz=64&domain=google.com
+// @grant        none
 // ==/UserScript==
 
 (() => {
@@ -34,12 +34,12 @@
         // handle left and right key
         window.onkeydown = (event) => {
             const { key, repeat } = event
-            if(!repeat){
-                if(key == 'ArrowLeft'){
+            if (!repeat) {
+                if (key == 'ArrowLeft') {
                     document.getElementsByClassName("view-bottom-bar")[0].children[1].children[0].click()
-                } else if(key == 'ArrowRight' && nextChapter.style.display == ""){
+                } else if (key == 'ArrowRight' && nextChapter.style.display == "") {
                     document.getElementsByClassName("view-bottom-bar")[0].children[3].children[0].click()
-                } else if(key == 'ArrowRight'){
+                } else if (key == 'ArrowRight') {
                     document.getElementsByClassName("view-bottom-bar")[0].children[2].children[0].click()
                 }
             }
@@ -51,8 +51,18 @@
         document.getElementsByTagName('head')[0].appendChild(css)
     }
 
+    const _AMQ = () => {
+        // remove Afk function
+        AfkKicker.prototype.setupAfkTimeout = () => { }
+        afkKicker.setup()
+    }
+
+    const _Youtube = () => {
+        document.querySelectorAll(".ytp-chapter-container").forEach(el => el.remove())
+    }
+
     domainName === "nhentai.net" && nhentai()
     domainName === "www.manhuaren.com" && manhuaren()
-
-    // Your code here...
+    domainName === `animemusicquiz.com` && _AMQ()
+    domainName === `www.youtube.com` && _Youtube()
 })();
