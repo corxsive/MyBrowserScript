@@ -93,8 +93,10 @@
 
             answer_input.addEventListener('keyup', (e) => {
                 let autocomplete_list = document.querySelectorAll("#qpAnswerInputContainer > div.awesomplete > ul > li")
-                if (answer_input.value.length >= 3 && autocomplete_list.length === 1) {
+                if (!quiz.skipController._toggled && answer_input.value.length >= 3 && autocomplete_list.length === 1) {
+                    let originText = answer_input.value
                     quiz.answerInput.setNewAnswer(`${autocomplete_list[0].textContent}`)
+                    answer_input.value = originText
                     quiz.skipClicked()
                 }
             }, true)
