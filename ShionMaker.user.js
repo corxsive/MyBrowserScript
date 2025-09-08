@@ -3,7 +3,6 @@
 // @version      2025-08-28
 // @description custom style only
 // @author       ShionMaker
-// @include      https://nhentai.net/g/*/*/
 // @include      https://animemusicquiz.com/
 // @include      https://www.youtube.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=google.com
@@ -17,17 +16,6 @@
     class Global {
         static getDomainName() {
             return window.location.hostname
-        }
-    }
-
-    class Nhentai {
-        constructor() {
-            console.log("nhentai.net detected")
-        }
-        fullHeightImageDisplay() {
-            const css = document.createElement('style')
-            css.innerHTML = "#image-container a img {height: 100vh !important; width: auto}"
-            document.getElementsByTagName('head')[0].appendChild(css)
         }
     }
 
@@ -116,10 +104,6 @@
     }
 
     switch (Global.getDomainName()) {
-        case "nhentai.net":
-            const nhentai = new Nhentai()
-            nhentai.fullHeightImageDisplay()
-            break
         case "animemusicquiz.com":
             const amq = new AMQ()
             amq.alertAutoConfirm()
