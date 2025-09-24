@@ -1,15 +1,19 @@
 // ==UserScript==
-// @name         MyLittleShion
-// @version      2025-08-28
-// @description custom style only
+// @name         MyLittleShion Script
+// @version      2025-09-24
+// @description  custom style only
 // @author       ShionMaker
-// @include      https://nhentai.net/g/*/*/
+// @include      https://n*n*a*.n*/g/*/*/
 // @include      https://animemusicquiz.com/
 // @include      https://www.youtube.com/*
 // @include      https://anime1.me/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=google.com
+// @license      MIT license
 // @grant        none
 // @run-at       document-end
+// @downloadURL  https://github.com/corxsive/MyBrowserScript/blob/main/ShionMaker.user.js
+// @updateURL    https://github.com/corxsive/MyBrowserScript/blob/main/ShionMaker.user.js
+
 // ==/UserScript==
 
 (() => {
@@ -21,9 +25,9 @@
         }
     }
 
-    class Nhentai {
+    class Secret {
         constructor() {
-            console.log("nhentai.net detected")
+
         }
         fullHeightImageDisplay() {
             const css = document.createElement('style')
@@ -50,10 +54,6 @@
             const callback = (mutationsList, observer) => {
                 for (const mutation of mutationsList) {
                     if (mutation.type === 'childList') {
-                        // const popup = document.querySelector(".swal2-actions")
-                        // if (popup) {
-                        //     document.querySelector(".swal2-actions button").onclick()
-                        // }
                         this.#clickAlert()
                     }
                 }
@@ -131,151 +131,66 @@
             #switch-1 {
                 top: 5px;
                 right: 25px;
-                width: 60px;
+                width: 120px;
                 height: 34px;
             }
 
             #switch-2 {
                 top: 45px;
                 right: 25px;
-                width: 60px;
+                width: 120px;
                 height: 34px;
-            }
-
-            .switch input {
-                opacity: 0;
-                width: 0;
-                height: 0;
-            }
-
-            .slider {
-                position: absolute;
-                cursor: pointer;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background-color: #ccc;
-                -webkit-transition: .4s;
-                transition: .4s;
-            }
-
-            .slider:before {
-                position: absolute;
-                content: "";
-                height: 26px;
-                width: 26px;
-                left: 4px;
-                bottom: 4px;
-                background-color: white;
-                -webkit-transition: .4s;
-                transition: .4s;
-            }
-
-            input:checked + .slider {
-                background-color: #2196F3;
-            }
-
-            input:focus + .slider {
-                box-shadow: 0 0 1px #2196F3;
-            }
-
-            input:checked + .slider:before {
-                -webkit-transform: translateX(26px);
-                -ms-transform: translateX(26px);
-                transform: translateX(26px);
-            }
-                
-            .slider.round {
-                border-radius: 34px;
-            }
-
-            .slider.round:before {
-                border-radius: 50%;
             }
             `
             document.getElementsByTagName('head')[0].appendChild(style)
         }
 
-        appendSwitch() {
-            const autoPlaySwitch = document.createElement("label")
-            autoPlaySwitch.classList += "switch"
-            autoPlaySwitch.id = "switch-1"
+        appendSwitch = () => {
+            const btn1 = document.createElement("button")
+            btn1.classList += "switch"
+            btn1.id = "switch-1"
+            btn1.textContent = "順序播放"
+            btn1.onclick = () => {
+                this.addSwitchMethod(Array.from(document.querySelectorAll('article video')))
+            }
+            document.getElementById("page").appendChild(btn1)
 
-            const autoPlaySwitch2 = document.createElement("label")
-            autoPlaySwitch2.classList += "switch"
-            autoPlaySwitch2.id = "switch-2"
-
-            const checkbox = document.createElement("input")
-            checkbox.type = "checkbox"
-            autoPlaySwitch.appendChild(checkbox)
-
-            const checkbox2 = document.createElement("input")
-            checkbox2.type = "checkbox"
-            autoPlaySwitch2.appendChild(checkbox2)
-
-            const span = document.createElement("span")
-            span.classList += "slider round"
-            autoPlaySwitch.appendChild(span)
-
-            const span2 = document.createElement("span")
-            span2.classList += "slider round"
-            autoPlaySwitch2.appendChild(span2)
-
-            const videos = Array.from(document.querySelectorAll('article video'))
-
-            autoPlaySwitch.onclick = () => this.addSwitchMethod(videos)
-            document.getElementById("page").appendChild(autoPlaySwitch)
-            autoPlaySwitch2.onclick = () => this.addSwitchMethod(videos.reverse())
-            document.getElementById("page").appendChild(autoPlaySwitch2)
+            const btn2 = document.createElement("button")
+            btn2.classList += "switch"
+            btn2.id = "switch-2"
+            btn2.textContent = "倒序播放"
+            btn2.onclick = () => {
+                this.addSwitchMethod(Array.from(document.querySelectorAll('article video')).reverse())
+            }
+            document.getElementById("page").appendChild(btn2)
 
             this.applyCss()
         }
 
-        addSwitchMethod(videos) {
+        addSwitchMethod = (videos) => {
 
             // 初始化：設定靜音、隱藏除第一個影片外的所有影片
             videos.forEach((video, index) => {
                 video.muted = true;
                 video.setAttribute('controls', ''); // 顯示控制列
-            });
-
-            // 監聽所有影片的 play 事件，只要使用者互動就進入 fullscreen
-            videos.forEach((video) => {
-                video.addEventListener('play', () => {
-                    if (!document.fullscreenElement) {
-                        if (video.requestFullscreen) video.requestFullscreen();
-                        else if (video.mozRequestFullScreen) video.mozRequestFullScreen();
-                        else if (video.webkitRequestFullscreen) video.webkitRequestFullscreen();
-                        else if (video.msRequestFullscreen) video.msRequestFullscreen();
-                    }
-                    video.muted = false;
+                video.addEventListener('play', (el) => {
+                    el.target.muted = false;
                 });
             });
-
 
             // 處理影片播放結束後的自動播放
             videos.forEach((video, index) => {
                 video.addEventListener('ended', () => {
-                    if (document.exitFullscreen) document.exitFullscreen();
-                    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
-                    else if (document.msExitFullscreen) document.msExitFullscreen();
+
+                    video.style.display = 'none';
 
                     const nextVideo = videos[index + 1];
 
-                    setTimeout(() => {
-                        if (nextVideo) {
-                            video.style.display = 'none';
-                            if (!document.fullscreenElement) {
-                                if (nextVideo.requestFullscreen) nextVideo.requestFullscreen();
-                                else if (nextVideo.webkitRequestFullscreen) nextVideo.webkitRequestFullscreen();
-                                else if (nextVideo.msRequestFullscreen) nextVideo.msRequestFullscreen();
-                            }
-                            nextVideo.style.display = 'block';
-                            nextVideo.muted = false;
-                            nextVideo.click()
-                        }
-                    }, 1500)
+                    if (nextVideo) {
+                        nextVideo.style.display = 'block';
+                        nextVideo.muted = false;
+                        nextVideo.click()
+                    }
                 });
             });
 
@@ -283,10 +198,6 @@
     }
 
     switch (Global.getDomainName()) {
-        case "nhentai.net":
-            const nhentai = new Nhentai()
-            nhentai.fullHeightImageDisplay()
-            break
         case "animemusicquiz.com":
             const amq = new AMQ()
             amq.alertAutoConfirm()
@@ -302,6 +213,11 @@
             anime1.appendSwitch()
             break
         default:
+            if (/^(?=.*n[^n]*n)(?=.*\.n[a-zA-Z]{2,}).*$/.test(Global.getDomainName())) {
+                const secret = new Secret()
+                secret.fullHeightImageDisplay()
+                break
+            }
             break
     }
 })();
