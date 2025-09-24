@@ -11,8 +11,8 @@
 // @license      MIT license
 // @grant        none
 // @run-at       document-end
-// @downloadURL  https://github.com/corxsive/MyBrowserScript/blob/main/ShionMaker.user.js
-// @updateURL    https://github.com/corxsive/MyBrowserScript/blob/main/ShionMaker.user.js
+// @downloadURL  https://github.com/corxsive/MyBrowserScript/raw/refs/heads/main/ShionMaker.user.js
+// @updateURL    https://github.com/corxsive/MyBrowserScript/raw/refs/heads/main/ShionMaker.user.js
 
 // ==/UserScript==
 
