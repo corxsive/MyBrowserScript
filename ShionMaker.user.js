@@ -65,6 +65,21 @@
             AfkKicker.prototype.setupAfkTimeout = () => { }
             afkKicker.setup()
         }
+        applyCss() {
+            const style = document.createElement("style")
+            style.innerHTML = `
+            #qpSongInfoContainer {
+                position: absolute;
+                display: table;
+                margin-left: 70px;
+                margin-top: 80px;
+            }
+            `
+            document.getElementsByTagName('head')[0].appendChild(style)
+        }
+        styleChange() {
+            const styles = qpSongInfoContainer
+        }
         tabAutocomplete() {
             let answer_input = document.querySelector("#qpAnswerInput, #sai-answer-input")
             let selection = null
@@ -201,6 +216,7 @@
         case "animemusicquiz.com":
             const amq = new AMQ()
             amq.alertAutoConfirm()
+            amq.applyCss()
             amq.removeAfk()
             amq.tabAutocomplete()
             break
