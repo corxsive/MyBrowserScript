@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         MyLittleShion Script
-// @version      2025-09-24
+// @version      2025-09-27
 // @description  custom style only
 // @author       ShionMaker
 // @include      https://n*n*a*.n*/g/*/*/
@@ -22,6 +22,11 @@
     class Global {
         static getDomainName() {
             return window.location.hostname
+        }
+        static applyCss = (cssString) => {
+            const style = document.createElement("style")
+            style.innerHTML = cssString
+            document.getElementsByTagName('head')[0].appendChild(style)
         }
     }
 
@@ -65,18 +70,14 @@
             AfkKicker.prototype.setupAfkTimeout = () => { }
             afkKicker.setup()
         }
-        applyCss() {
-            const style = document.createElement("style")
-            style.innerHTML = `
+        applyCss = () => Global.applyCss(`
             #qpSongInfoContainer {
                 position: absolute;
                 display: table;
                 margin-left: 70px;
                 margin-top: 80px;
             }
-            `
-            document.getElementsByTagName('head')[0].appendChild(style)
-        }
+        `)
         styleChange() {
             const styles = qpSongInfoContainer
         }
@@ -135,9 +136,7 @@
         constructor() {
             console.log("anime1.me detected")
         }
-        applyCss() {
-            const style = document.createElement("style")
-            style.innerHTML = `
+        applyCss = () => Global.applyCss(`
             .switch {
                 position: fixed;
                 display: inline-block;
@@ -157,8 +156,7 @@
                 height: 34px;
             }
             `
-            document.getElementsByTagName('head')[0].appendChild(style)
-        }
+        )
 
         appendSwitch = () => {
             const btn1 = document.createElement("button")
@@ -186,28 +184,25 @@
 
             // 初始化：設定靜音、隱藏除第一個影片外的所有影片
             videos.forEach((video, index) => {
-                video.muted = true;
-                video.setAttribute('controls', ''); // 顯示控制列
+                video.muted = true
+                video.setAttribute('controls', '') // 顯示控制列
                 video.addEventListener('play', (el) => {
-                    el.target.muted = false;
-                });
-            });
+                    el.target.muted = false
+                })
+            })
 
             // 處理影片播放結束後的自動播放
             videos.forEach((video, index) => {
                 video.addEventListener('ended', () => {
-
-                    video.style.display = 'none';
-
-                    const nextVideo = videos[index + 1];
-
+                    video.style.display = 'none'
+                    const nextVideo = videos[index + 1]
                     if (nextVideo) {
-                        nextVideo.style.display = 'block';
-                        nextVideo.muted = false;
+                        nextVideo.style.display = 'block'
+                        nextVideo.muted = false
                         nextVideo.click()
                     }
-                });
-            });
+                })
+            })
 
         }
     }
@@ -236,4 +231,4 @@
             }
             break
     }
-})();
+})()
