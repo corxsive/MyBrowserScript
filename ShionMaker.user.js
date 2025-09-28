@@ -77,6 +77,12 @@
                 margin-left: 70px;
                 margin-top: 80px;
             }
+            #qpAnimeName {
+                font-size: 60%;
+            }
+            .qpAnimeNameContainer {
+                width: 600px
+            }
         `)
         styleChange() {
             const styles = qpSongInfoContainer
@@ -118,6 +124,62 @@
                 }
             }, true)
         }
+
+        i18n = () => {
+            new Listener("answer results", (result) => {
+                // 
+                let query = `
+                query ($id: Int) {
+                    Media (id: $id, type: ANIME) {
+                        title {
+                            native
+                        }
+                    }
+                }`
+                let variables = {
+                    id: result.songInfo.siteIds.aniListId
+                }
+                let url = "https://graphql.anilist.co",
+                    options = {
+                        method: "POST",
+                        mode: "cors",
+                        headers: {
+                            'Content-Type': "application/json",
+                            'Accept': "application/json",
+                        },
+                        body: JSON.stringify({
+                            query: query,
+                            variables: variables
+                        }),
+                    }
+                fetch(url, options)
+                    .then(handleResponse)
+                    .then(handleData)
+                    .catch(handleError)
+
+                function handleResponse(response) {
+                    return response.json().then(function (json) {
+                        return response.ok ? json : Promise.reject(json)
+                    });
+                }
+                function handleData(data) {
+                    const nativeTitle = data.data.Media.title.native
+                    document.getElementById("qpAnimeName").innerHTML = nativeTitle
+                }
+                function handleError(error) {
+                    setTimeout(() => {
+                        if (gameChat.open) {
+                            if (error && error.message) {
+                                gameChat.systemMessage(error.message)
+                            } else {
+                                gameChat.systemMessage(`Anilist API Error, check console.`)
+                            }
+                        }
+                    }, 0)
+                }
+
+            }).bindListener()
+        }
     }
 
     class Youtube {
@@ -155,8 +217,7 @@
                 width: 120px;
                 height: 34px;
             }
-            `
-        )
+        `)
 
         appendSwitch = () => {
             const btn1 = document.createElement("button")
@@ -210,10 +271,21 @@
     switch (Global.getDomainName()) {
         case "animemusicquiz.com":
             const amq = new AMQ()
+            // Auto-confirm every pop-up window
             amq.alertAutoConfirm()
+
+            // set song infos as absolute position instead of relative
             amq.applyCss()
+
+            // remove idle kicked
             amq.removeAfk()
+
+            // using tab to swap the answer instead the arrow key
             amq.tabAutocomplete()
+
+            // i18n to "anime name"
+            amq.i18n()
+
             break
         case "www.youtube.com":
             const yt = new Youtube()
