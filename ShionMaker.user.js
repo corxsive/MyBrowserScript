@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         MyLittleShion Script
-// @version      2025-09-27
+// @version      2025-10-15
 // @description  custom style only
 // @author       ShionMaker
 // @include      https://n*n*a*.n*/g/*/*/
@@ -81,7 +81,9 @@
                 font-size: 60%;
             }
             .qpAnimeNameContainer {
-                width: 600px
+                height: 100px;
+                width: 600px;
+                align-content: center;
             }
         `)
         styleChange() {
@@ -127,7 +129,7 @@
 
         i18n = () => {
             new Listener("answer results", (result) => {
-                // 
+                //
                 let query = `
                 query ($id: Int) {
                     Media (id: $id, type: ANIME) {
@@ -164,7 +166,7 @@
                 }
                 function handleData(data) {
                     const nativeTitle = data.data.Media.title.native
-                    document.getElementById("qpAnimeName").innerHTML = nativeTitle
+                    document.getElementById("qpAnimeName").innerHTML += `\n${nativeTitle}`
                 }
                 function handleError(error) {
                     setTimeout(() => {
@@ -203,7 +205,7 @@
                 position: fixed;
                 display: inline-block;
             }
-                
+
             #switch-1 {
                 top: 5px;
                 right: 25px;
@@ -246,7 +248,7 @@
             // 初始化：設定靜音、隱藏除第一個影片外的所有影片
             videos.forEach((video, index) => {
                 video.muted = true
-                video.setAttribute('controls', '') // 顯示控制列
+                // video.setAttribute('controls', '') // 顯示控制列
                 video.addEventListener('play', (el) => {
                     el.target.muted = false
                 })
