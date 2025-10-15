@@ -219,6 +219,22 @@
                 width: 120px;
                 height: 34px;
             }
+            
+            #secondary {
+                display:none;
+            }
+            article {
+                min-height:100vh !important;
+            }
+
+            article .video-js {
+                width: 80vw !important;
+                max-width: 80vw !important;
+                height: 85vh !important;
+                max-height: 85vh;
+                margin-left: -200px;
+            }
+            
         `)
 
         appendSwitch = () => {
@@ -249,7 +265,7 @@
             videos.forEach((video, index) => {
                 video.muted = true
                 // video.setAttribute('controls', '') // 顯示控制列
-                video.addEventListener('play', (el) => {
+                video.addEventListener('play', async (el) => {
                     el.target.muted = false
                 })
             })
@@ -257,10 +273,11 @@
             // 處理影片播放結束後的自動播放
             videos.forEach((video, index) => {
                 video.addEventListener('ended', () => {
-                    video.style.display = 'none'
+                    if (document.fullscreenElement != null) {
+                        document.exitFullscreen()
+                    }
                     const nextVideo = videos[index + 1]
                     if (nextVideo) {
-                        nextVideo.style.display = 'block'
                         nextVideo.muted = false
                         nextVideo.click()
                     }
