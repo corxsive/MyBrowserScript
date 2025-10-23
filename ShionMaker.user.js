@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         MyLittleShion Script
-// @version      2025-10-15
+// @version      2025-10-23
 // @description  custom style only
 // @author       ShionMaker
 // @include      https://n*n*a*.n*/g/*/*/
@@ -46,6 +46,9 @@
             console.log("animemusicquiz.com detected")
         }
         #clickAlert() {
+            const inputField = document.querySelector('.swal2-input')
+            if (inputField?.style.display != 'none' | undefined) return
+
             const popup = document.querySelector(".swal2-actions")
             if (popup) {
                 document.querySelector(".swal2-actions button").onclick()
