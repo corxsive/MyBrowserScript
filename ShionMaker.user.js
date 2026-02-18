@@ -3,7 +3,7 @@
 // @version      2025-10-23
 // @description  custom style only
 // @author       ShionMaker
-// @include      https://n*n*a*.n*/g/*/*/
+// @include      https://n*n*a*.n*/*
 // @include      https://animemusicquiz.com/
 // @include      https://www.youtube.com/*
 // @include      https://anime1.me/*
@@ -32,12 +32,33 @@
 
     class Secret {
         constructor() {
-
+            console.log(`Secret class detected`)
         }
         fullHeightImageDisplay() {
             const css = document.createElement('style')
             css.innerHTML = "#image-container a img {height: 100vh !important; width: auto}"
             document.getElementsByTagName('head')[0].appendChild(css)
+        }
+        handleKeyWASDorArrowKey () {
+            document.body.addEventListener('keydown', e => {
+                switch (e.keyCode){
+                    case 68: case 39:
+                        document.getElementsByClassName('current')[0].nextElementSibling.click()
+                        break
+                    case 83:
+                        window.scrollBy(0, window.innerHeight * 0.5)
+                        break
+                    case 65: case 37:
+                        //prev
+                        document.getElementsByClassName('current')[0].previousElementSibling.click()
+                        break
+                    case 87:
+                        window.scrollBy(0, -window.innerHeight * 0.5)
+                        break
+                    default:
+                        break
+                }
+            })
         }
     }
 
@@ -119,15 +140,27 @@
                 }
             }, true)
 
-            answer_input.addEventListener('keyup', (e) => {
+            function validateLocalStorage(item) {
+                try {
+                    const json = JSON.parse(localStorage.getItem(item));
+                    if (!json || typeof json !== "object") return {};
+                    return json;
+                }
+                catch {
+                    return {};
+                }
+            }
+
+            /*answer_input.addEventListener('keyup', (e) => {
+                //need to disable official auto submit
                 let autocomplete_list = document.querySelectorAll("#qpAnswerInputContainer > div.awesomplete > ul > li")
                 if (!quiz.skipController._toggled && answer_input.value.length >= 3 && autocomplete_list.length === 1) {
-                    let originText = answer_input.value
-                    quiz.answerInput.setNewAnswer(`${autocomplete_list[0].textContent}`)
-                    answer_input.value = originText
-                    quiz.skipClicked()
+                    let target_answer = autocomplete_list[0].textContent
+                    socket.sendCommand({ type: "quiz", command: "quiz answer", data: { answer: target_answer } }, (res) => {
+                        quiz.skipClicked()
+                    })
                 }
-            }, true)
+            }, true)*/
         }
 
         i18n = () => {
@@ -222,7 +255,7 @@
                 width: 120px;
                 height: 34px;
             }
-            
+
             #secondary {
                 display:none;
             }
@@ -237,7 +270,7 @@
                 max-height: 85vh;
                 margin-left: -200px;
             }
-            
+
         `)
 
         appendSwitch = () => {
@@ -318,9 +351,12 @@
             anime1.appendSwitch()
             break
         default:
-            if (/^(?=.*n[^n]*n)(?=.*\.n[a-zA-Z]{2,}).*$/.test(Global.getDomainName())) {
-                const secret = new Secret()
+            const secret = new Secret()
+            if (/^(?=.*n[^n]*n)(?=.*\.n[a-zA-Z]{2,}\/g\/).*$/.test(Global.getDomainName())) {
                 secret.fullHeightImageDisplay()
+                break
+            } else if (window.location.search != '' || window.location.toString().length == 20) {
+                secret.handleKeyWASDorArrowKey()
                 break
             }
             break
