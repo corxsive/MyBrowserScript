@@ -354,12 +354,13 @@
             anime1.appendSwitch()
             break
         default:
-            if (/^(?=.*n[^n]*n)(?=.*\.n[a-zA-Z]{2,}\/g\/).*$/.test(Global.getDomainName())) {
+            if (/^(?=.*n[^n]*n)(?=.*\.n[a-zA-Z]{2,}).*$/.test(Global.getDomainName())) {
                 const secret = new Secret()
-                secret.fullHeightImageDisplay()
-            } else if (/^(?=.*n[^n]*n)(?=.*\.n[a-zA-Z]{2,}).*$/.test(Global.getDomainName()) && (Global.getGETParams() != '' || window.location.toString().length == 20)) {
-                const secret = new Secret()
-                secret.handleKeyWASDorArrowKey()
+                if (Global.getGETParams() != '' || window.location.toString().length == 20) {
+                    secret.handleKeyWASDorArrowKey()
+                } else {
+                    secret.fullHeightImageDisplay()
+                }
             }
             break
     }
