@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         MyLittleShion Script
-// @version      2025-10-23
+// @version      2026-02-18
 // @description  custom style only
 // @author       ShionMaker
 // @include      https://n*n*a*.n*/*
@@ -20,6 +20,9 @@
     'use strict'
 
     class Global {
+        static getGETParams() {
+            return window.location.search
+        }
         static getDomainName() {
             return window.location.hostname
         }
@@ -351,13 +354,12 @@
             anime1.appendSwitch()
             break
         default:
-            const secret = new Secret()
             if (/^(?=.*n[^n]*n)(?=.*\.n[a-zA-Z]{2,}\/g\/).*$/.test(Global.getDomainName())) {
+                const secret = new Secret()
                 secret.fullHeightImageDisplay()
-                break
-            } else if (window.location.search != '' || window.location.toString().length == 20) {
+            } else if (/^(?=.*n[^n]*n)(?=.*\.n[a-zA-Z]{2,}).*$/.test(Global.getDomainName()) && (Global.getGETParams() != '' || window.location.toString().length == 20)) {
+                const secret = new Secret()
                 secret.handleKeyWASDorArrowKey()
-                break
             }
             break
     }
